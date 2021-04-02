@@ -11,13 +11,27 @@ const operators = document.querySelectorAll('.operator');
 const clear = document.querySelector('.clear');
 const equals = document.querySelector('.equals');
 
-let date = new Date();
-let hours = date.getHours();
-let minutes = date.getMinutes();
-let seconds = date.getSeconds()
+const prefixTimeWithZero = (i) => {
+  if (i < 10){
+    i = "0" + i
+  };
+  return i;
+}
 
-timeHours.textContent = `${hours < 10 ? '0' : ''}${hours}`;
-timeMinutes.textContent = `${minutes < 10 ? '0' : ''}${minutes}`;
+const startTime = () => {
+  let date = new Date();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds()
+  minutes = prefixTimeWithZero(minutes);
+
+  timeHours.textContent = hours
+  timeMinutes.textContent = `${minutes}`
+
+  setTimeout(startTime, 500);
+}
+
+startTime()
 
 const clearScreen = () => {
   firstOperand.textContent = '';
@@ -26,7 +40,7 @@ const clearScreen = () => {
   showTotal.textContent = '';
 }
 
-inputs.forEach((element, index) => {
+inputs.forEach( element => {
   element.addEventListener('click', function showInput() {
       if(!operator.textContent){
         firstOperand.textContent += element.textContent
@@ -36,7 +50,7 @@ inputs.forEach((element, index) => {
   })
 })
 
-operators.forEach((element, index) => {
+operators.forEach( element => {
   element.addEventListener('click', function showOperator(){
     if(showTotal.textContent && showTotal.textContent !== 'error'){
       firstOperand.textContent = calculateTotal()
@@ -48,15 +62,10 @@ operators.forEach((element, index) => {
 })
 
 deleteInput.addEventListener('click', function deleteInput(){
-  console.log(secondOperand.textContent)
-  console.log('ot',showTotal.textContent)
   if(secondOperand.textContent){
     secondOperand.textContent = secondOperand.textContent.slice(0, -1)
-    console.log(secondOperand.textContent)
   }else if(operator.textContent){
-    console.log(showTotal.textContent)
     operator.textContent = ''
-    console.log(showTotal.textContent)
   }else{
     firstOperand.textContent = firstOperand.textContent.slice(0, -1)
   }
